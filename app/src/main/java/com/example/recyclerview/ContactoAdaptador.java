@@ -1,5 +1,6 @@
 package com.example.recyclerview;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +14,17 @@ import java.util.ArrayList;
 
 public class ContactoAdaptador  extends RecyclerView.Adapter<ContactoAdaptador.ContactoViewHolder>{
     ArrayList<Contacto> lista;
+    private final OnItemClickListener listener;
+    private final Context context;
 
-    public ContactoAdaptador(ArrayList<Contacto> lista) {
+    public interface OnItemClickListener {
+        void onItemClick(Contacto contacto, int position);
+    }
+
+    public ContactoAdaptador(Context context, ArrayList<Contacto> lista, OnItemClickListener listener) {
         this.lista = lista;
+        this.listener = listener;
+        this.context = context;
     }
     @NonNull
     @Override
@@ -29,11 +38,16 @@ public class ContactoAdaptador  extends RecyclerView.Adapter<ContactoAdaptador.C
 
     @Override
     public void onBindViewHolder(@NonNull ContactoAdaptador.ContactoViewHolder holder, int position) {
-        Contacto comic = lista.get(position);
-        holder.imageView.setImageResource(comic.getImagen());
-        holder.nombre.setText(comic.getNombre());
-        holder.email.setText(comic.getEmail());
-        holder.tlfn.setText(comic.getTlfn());
+        Contacto c = lista.get(position);
+        holder.imageView.setImageResource(c.getImagen());
+        holder.nombre.setText(c.getNombre());
+        holder.email.setText(c.getEmail());
+        holder.tlfn.setText(c.getTlfn());
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onItemClick(c, position);
+            }
+        });
     }
 
     @Override

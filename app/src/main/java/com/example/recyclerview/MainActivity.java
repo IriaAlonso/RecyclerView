@@ -1,6 +1,7 @@
 package com.example.recyclerview;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ContactoAdaptador.OnItemClickListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +40,50 @@ public class MainActivity extends AppCompatActivity {
                 new Contacto("Ambessa", "ambessa@gmail.com","888888", R.drawable.ambessa),
                 new Contacto("Singed", "singed@gmail.com","999999", R.drawable.singed)
         }));
-        ContactoAdaptador contactoAdapter = new ContactoAdaptador(contactoArrayList);
+        ContactoAdaptador contactoAdapter = new ContactoAdaptador(this, contactoArrayList, this);
 
         RecyclerView rvContactos = findViewById(R.id.rv_contactos);
         rvContactos.setLayoutManager(new LinearLayoutManager(this));
         rvContactos.setAdapter(contactoAdapter);
 
+
+
+    }
+
+    @Override
+    public void onItemClick(Contacto contacto, int position) {
+        String mensaje = "";
+        switch (contacto.getNombre().toLowerCase()) {
+            case "vi":
+                mensaje = "La Agente de Piltover";
+                break;
+            case "caitlyn":
+                mensaje = "La Sheriff de Piltover";
+                break;
+            case "jinx":
+                mensaje = "La Bala Perdida";
+                break;
+            case "jayce":
+                mensaje = "El Defensor del Mañana";
+                break;
+            case "viktor":
+                mensaje = "El Heraldo de las Máquinas";
+                break;
+            case "ekko":
+                mensaje = "El Chico que Quebró el Tiempo";
+                break;
+            case "heimerdinger":
+                mensaje = "El Inventor Venerado";
+                break;
+            case "ambessa":
+                mensaje = "Matriarca de la Guerra";
+                break;
+            case "singed":
+                mensaje = "El Químico Loco";
+                break;
+            default:
+                mensaje = "falta informacion";
+        }
+        Toast.makeText(this, contacto.getNombre() + ": " + mensaje, Toast.LENGTH_SHORT).show();
     }
 }
